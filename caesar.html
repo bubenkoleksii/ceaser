@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans+Caption&family=Raleway:wght@500&display=swap" rel="stylesheet">
+    <title>Caesar Algorythm | Bubenko IPZ-20-2</title>
+</head>
+
+<style>
+    /*Nullable CSS*/
+    html, body, div, span, applet, object, iframe,
+    h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+    a, abbr, acronym, address, big, cite, code,
+    del, dfn, em, img, ins, kbd, q, s, samp,
+    small, strike, strong, sub, sup, tt, var,
+    b, u, i, center,
+    dl, dt, dd, ol, ul, li,
+    fieldset, form, label, legend,
+    table, caption, tbody, tfoot, thead, tr, th, td,
+    article, aside, canvas, details, embed,
+    figure, figcaption, footer, header, hgroup,
+    menu, nav, output, ruby, section, summary,
+    time, mark, audio, video {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font-size: 100%;
+        font: inherit;
+        vertical-align: baseline;
+    }
+    article, aside, details, figcaption, figure,
+    footer, header, hgroup, menu, nav, section {
+        display: block;
+    }
+    html {
+        height: 100%;
+    }
+    body {
+        line-height: 1;
+        font-family: 'PT Sans Caption', sans-serif;
+        font-family: 'Raleway', sans-serif;
+        font-weight: 400;
+    }
+    ol, ul {
+        list-style: none;
+    }
+    blockquote, q {
+        quotes: none;
+    }
+    blockquote:before, blockquote:after,
+    q:before, q:after {
+        content: '';
+        content: none;
+    }
+    table {
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+    /**/
+
+    .wrapper {
+        height: 100%;
+        min-height: 100vh;
+        overflow: hidden;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+
+    .content {
+        flex: 1 1 auto;
+        -webkit-box-flex: 1;
+        padding-top: 30px;
+        width: 70%;
+    }
+
+    .title {
+        text-align: center;
+        padding-bottom: 35px;
+    }
+
+    .inputDataContainer {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    @media (max-width: 768px) {
+        .inputDataContainer {
+            flex-direction: row;
+        }
+    }
+
+    .inputStringContainer {
+        margin-top: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    textarea {
+        width: 100%;
+        min-height: 30px;
+        resize: none;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        padding: 0.5rem;
+        box-shadow: inset 0 0 0.25rem #ddd;
+    }
+
+    textarea.inputString {
+        min-height: 100px;
+        margin-top: 10px;
+    }
+
+    textarea:focus {
+        outline: none;
+    }
+
+    .alphabetsLists {
+        display: flex;
+        gap: 15px;
+    }
+
+    @media (max-width: 768px) {
+        .alphabetsLists {
+            flex-direction: column;
+        }
+    }
+
+    .alphabetsLists a {
+        cursor: pointer;
+    }
+
+    .inputKeyContainer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+        gap: 15px;
+    }
+
+    .inputKey:focus {
+        outline: none;
+    }
+
+    .inputKey {
+        width: 60px;
+        height: 25px;
+        text-align: center;
+    }
+
+    footer {
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        max-width: 1140px;
+        width: 100%;
+        padding-bottom: 20px;
+        padding-top: 30px;
+    }
+
+    .inner {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 50px;
+    }
+
+    .copy h3 {
+        padding-top: 25px;
+        text-align: center;
+    }
+
+    .operationsLists {
+        margin-top: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 150px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .operationsLists {
+            gap: 50px;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .operationsLists {
+            gap: 10px;
+        }
+    }
+
+    .operationsLists a {
+        cursor: pointer;
+    }
+
+    .resultStringContainer {
+        margin-top: 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    textarea.resultString {
+        min-height: 100px;
+        margin-top: 10px;
+    }
+
+    .onlyCapitalContainer {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        margin-top: 5px;
+        gap: 4px;
+    }
+
+    a {
+        width: 100px;
+        height: 30px;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        align-self: center;
+        padding: 10px;
+    }
+
+    a.active {
+        background-color: orangered;
+        color: white;
+        border-radius: 10px 10px;
+    }
+
+    #result {
+        font-size: 14px;
+        color: black;
+    }
+
+    .title {
+        font-size: 24px;
+    }
+</style>
+
+<body>
+    <div class="wrapper">
+        <div class="content">
+            <h3 class="title">Шифр Цезаря</h3>
+
+            <div class="inputDataContainer">
+                <div class="alphabetsLists">
+                    <a class="active" id="ukr">Український алфавіт</a>
+                    <a id="eng">Англійський алфавіт</a>
+                    <a id="other">Довільний алфавіт</a>
+                </div>
+
+                <textarea class="inputDataAlphabet" disabled="disabled">АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯабвгґдеєжзиіїйклмнопрстуфхцчшщьюя</textarea>
+            </div>
+
+            <div class="onlyCapitalContainer">
+                <input type="checkbox" id="capital" name="capital">
+                <label for="capital">Лише великі літери</label>
+            </div>
+
+            <div class="inputStringContainer">
+                <label for="inputString">Вхідний текст</label>
+                <textarea placeholder="Борітеся — поборете! Вам Бог помагає! За вас правда, за вас слава І воля святая!" id="inputString" class="inputString"></textarea>
+            </div>
+
+            <div class="inputKeyContainer">
+                <label for="inputKey">Ключ</label>
+                <input type="number" value="1" id="inputKey" min="1" class="inputKey">
+            </div>
+
+            <div class="operationsLists">
+                <a class="active" id="encrypt">Зашифрувати</a>
+                <a id="decrypt">Розшифрувати</a>
+                <a id="searching">Пошук ключів</a>
+            </div>
+
+            <div class="resultStringContainer">
+                <label for="result">Результат</label>
+                <textarea id="result" disabled="disabled" placeholder="Т йян Ащ Ан, йяИ хюіуші, ьщйсАі хюіящЗ, рнцншто, йчсйіоАЖяИ мютїшщЗ ющящЗ,яьщхщшйтхБ йчсйіоАЖяИ, ящшҐн рБяАютДіо... Т шнчі АщчБ ьщДсшБ, т хюіЗшнчіо! аіюія еНЙдНШХЩ" class="resultString"></textarea>
+            </div>
+        </div>
+
+        <footer>
+            <div class="inner">
+                <a href="https://twitter.com/OBubenko" target="_blank">
+                    <img width="32" src="https://cdn-icons-png.flaticon.com/512/124/124021.png">
+                </a>
+
+                <a href="https://www.instagram.com/bubenkooleksii/" target="_blank">
+                    <img width="32" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/2048px-Instagram_icon.png">
+                </a>
+
+                <a href="https://t.me/Leks9" target="_blank">
+                    <img width="32" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/2048px-Telegram_logo.svg.png">
+                </a>
+            </div>
+
+            <div class="copy">
+                <h3>© 2023, Bubenko Oleksii, IPZ-20-2</h3>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Find HTML-tags
+        const ukrainianAlphabetButton = document.querySelector('#ukr');
+        const englishAlphabetButton = document.querySelector('#eng');
+        const otherAlphabetButton = document.querySelector('#other');
+
+        const encryptButton = document.querySelector('#encrypt');
+        const decryptButton = document.querySelector('#decrypt');
+        const searchingButton = document.querySelector('#searching');
+
+        const onlyCapitalButton = document.querySelector('#capital');
+        const onlyCapitalContainer = document.querySelector('.onlyCapitalContainer');
+
+        const alphabetTextArea = document.querySelector('.inputDataAlphabet');
+        const inputTextArea = document.querySelector('#inputString');
+        const resultTextArea = document.querySelector('#result');
+        const inputKey = document.querySelector('#inputKey');
+
+        // Alphabets
+        const ukrainianCapitalAlphabet = 'АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯ';
+        const ukrainianLowerAlphabet = 'абвгґдеєжзиіїйклмнопрстуфхцчшщьюя';
+
+        const englishCapitalAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const englishLowerAlphabet = 'abcdefghijklmnopqrstuvwxyz';
+
+        // Global variables
+        let currentAlphabet = 'ukr';
+        let otherAlphabetSymbols = '';
+        let currentOperation = 'encrypt'
+
+        // Alphabet buttons handlers
+        englishAlphabetButton.addEventListener('click', () => {
+          if (currentAlphabet === 'eng')
+            return;
+
+          currentAlphabet = 'eng';
+          englishAlphabetButton.classList.toggle('active');
+          alphabetTextArea.disabled = true;
+          onlyCapitalContainer.style.display = 'flex';
+
+          if ( ukrainianAlphabetButton.classList.contains('active') ) {
+            ukrainianAlphabetButton.classList.remove('active')
+          }
+
+          if ( otherAlphabetButton.classList.contains('active') ) {
+            otherAlphabetButton.classList.remove('active')
+          }
+
+          alphabetTextArea.value = onlyCapitalButton.checked
+            ? englishCapitalAlphabet
+            : englishCapitalAlphabet + englishLowerAlphabet;
+
+          showResults();
+        });
+
+        ukrainianAlphabetButton.addEventListener('click', () => {
+          if (currentAlphabet === 'ukr')
+            return;
+
+          currentAlphabet = 'ukr';
+          ukrainianAlphabetButton.classList.toggle('active');
+          alphabetTextArea.disabled = true;
+          onlyCapitalContainer.style.display = 'flex';
+
+          if ( englishAlphabetButton.classList.contains('active') ) {
+            englishAlphabetButton.classList.remove('active')
+          }
+
+          if ( otherAlphabetButton.classList.contains('active') ) {
+            otherAlphabetButton.classList.remove('active')
+          }
+
+          alphabetTextArea.value = onlyCapitalButton.checked
+            ? ukrainianCapitalAlphabet
+            : ukrainianCapitalAlphabet + ukrainianLowerAlphabet;
+
+          showResults();
+        });
+
+        otherAlphabetButton.addEventListener('click', () => {
+          if (currentAlphabet === 'other')
+            return;
+
+          if (currentOperation === 'searching') {
+            currentOperation = 'encrypt';
+
+            searchingButton.classList.remove('active');
+            encryptButton.classList.add('active');
+          }
+
+          currentAlphabet = 'other';
+          otherAlphabetButton.classList.toggle('active');
+
+          alphabetTextArea.disabled = false;
+          onlyCapitalContainer.style.display = 'none';
+          alphabetTextArea.value = otherAlphabetSymbols;
+
+          if ( englishAlphabetButton.classList.contains('active') ) {
+            englishAlphabetButton.classList.remove('active')
+          }
+
+          if ( ukrainianAlphabetButton.classList.contains('active') ) {
+            ukrainianAlphabetButton.classList.remove('active')
+          }
+
+          showResults();
+        });
+
+        inputKey.addEventListener('input', () => {
+          showResults();
+        });
+
+        onlyCapitalButton.addEventListener('click', () => {
+          if (currentAlphabet === 'other')
+            return;
+
+          if (onlyCapitalButton.checked) {
+            if (currentAlphabet === 'ukr') {
+              alphabetTextArea.value = ukrainianCapitalAlphabet;
+            } else if (currentAlphabet === 'eng') {
+              alphabetTextArea.value = englishCapitalAlphabet;
+            }
+          } else {
+            if (currentAlphabet === 'ukr') {
+              alphabetTextArea.value = ukrainianCapitalAlphabet + ukrainianLowerAlphabet;
+            } else if (currentAlphabet === 'eng') {
+              alphabetTextArea.value = englishCapitalAlphabet + englishLowerAlphabet;
+            }
+          }
+
+          showResults();
+        });
+
+        alphabetTextArea.addEventListener('keyup', () => {
+          const currentValue = alphabetTextArea.value;
+
+          const uniqueChars = [...new Set(currentValue)];
+          const result = uniqueChars.join('');
+
+          alphabetTextArea.value = result;
+          otherAlphabetSymbols = result;
+
+          showResults();
+        });
+
+        // Operations handlers
+        encryptButton.addEventListener('click', () => {
+          if (currentOperation === 'encrypt')
+            return;
+
+          currentOperation = 'encrypt';
+          encryptButton.classList.toggle('active');
+
+          if ( decryptButton.classList.contains('active') ) {
+            decryptButton.classList.remove('active');
+          } else if ( searchingButton.classList.contains('active') ) {
+            searchingButton.classList.remove('active');
+          }
+
+          showResults();
+        });
+
+        decryptButton.addEventListener('click', () => {
+          if (currentOperation === 'decrypt')
+            return;
+
+          currentOperation = 'decrypt';
+          decryptButton.classList.toggle('active');
+
+          if ( encryptButton.classList.contains('active') ) {
+            encryptButton.classList.remove('active');
+          } else if ( searchingButton.classList.contains('active') ) {
+            searchingButton.classList.remove('active');
+          }
+
+          showResults();
+        });
+
+        searchingButton.addEventListener('click', () => {
+          if (currentOperation === 'searching' || currentAlphabet === 'other')
+            return;
+
+          currentOperation = 'searching';
+          searchingButton.classList.toggle('active');
+
+          if ( encryptButton.classList.contains('active') ) {
+            encryptButton.classList.remove('active');
+          } else if ( decryptButton.classList.contains('active') ) {
+            decryptButton.classList.remove('active');
+          }
+
+          showResults();
+        });
+
+        // Input on-change handler
+        inputTextArea.addEventListener('input', () => {
+          showResults();
+        });
+
+        function showResults() {
+          const text = inputTextArea.value;
+          const alphabet = alphabetTextArea.value;
+
+          let result;
+          if (currentOperation === 'searching') {
+            result = searchKeys(currentAlphabet, text);
+          } else {
+            const key = (currentOperation === 'encrypt') ? parseInt(inputKey.value) % alphabet.length : -(parseInt(inputKey.value) % alphabet.length);
+
+            result = caesarCrypt(alphabet, text, key);
+          }
+
+          resultTextArea.value = result ? result : '';
+        }
+
+        // Function for encrypt/decrypt text
+        function caesarCrypt(alphabet, text, key) {
+          let result = '';
+
+          if (!key && key !== 0)
+            return ;
+
+          let encryptedAlphabet = alphabet.slice(key);
+          encryptedAlphabet += alphabet.slice(0, key);
+
+          const otherSymbols = removeDuplicateChars(text, alphabet);
+          encryptedAlphabet += otherSymbols.uniqueChars;
+          alphabet += otherSymbols.uniqueChars;
+
+          for (let i = 0; i < text.length; i++) {
+            const index = alphabet.indexOf(text[i]);
+
+            if (encryptedAlphabet[index] === undefined)
+              return;
+
+            result += encryptedAlphabet[index];
+          }
+
+          return result;
+        }
+
+        // Helper for find other symbols (there are not in alphabet)
+        function removeDuplicateChars(str1, str2) {
+          let uniqueChars = '';
+
+          for (let i = 0; i < str1.length; i++) {
+            if (str2.indexOf(str1.charAt(i)) === -1) {
+              uniqueChars += str1.charAt(i);
+            }
+          }
+
+          let result = '';
+
+          for (let i = 0; i < str1.length; i++) {
+            if (uniqueChars.indexOf(str1.charAt(i)) === -1) {
+              result += str1.charAt(i);
+            }
+          }
+
+          return {uniqueChars, result};
+        }
+
+        // Function for search keys
+        function searchKeys(alphabet, str) {
+          const ukrainianCapitalAlphabet = 'АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯ';
+          const englishCapitalAlphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+          console.log('str', str);
+
+          if (!str)
+            return;
+
+          str = str.toUpperCase();
+
+          const regex = new RegExp('[-=~\\"\'#$%&*^:<>?/!{(|)}.1234567890\\, ]', 'g');
+
+          str = str.replace(regex, '');
+
+          let topLetterId;
+
+          if (alphabet === 'eng') {
+            topLetterId = 5;
+          } else if (alphabet === 'ukr') {
+            topLetterId = 18;
+          } else {
+            topLetterId = 5;
+          }
+
+          const charCount = {};
+          for (let i = 0; i < str.length; i++) {
+            const char = str[i];
+            charCount[char] = charCount[char] ? charCount[char] + 1 : 1;
+          }
+
+          const charCountsList = Object.keys(charCount).map(char => ({
+            character: char,
+            count: charCount[char]
+          })).sort((a, b) => b.count - a.count);
+
+          const keysArray = [];
+          for (const charCount of charCountsList) {
+            let index;
+
+            if (alphabet === 'ukr') {
+              index = ukrainianCapitalAlphabet.indexOf(charCount.character);
+            } else if (alphabet === 'eng') {
+              index = englishCapitalAlphabet.indexOf(charCount.character);
+            } else {
+              index = englishCapitalAlphabet.indexOf(charCount.character);
+            }
+
+            let key;
+            if (alphabet === 'ukr') {
+              key = (index - topLetterId) % ukrainianCapitalAlphabet.length;
+            } else if (alphabet === 'eng') {
+              key = (index - topLetterId) % englishCapitalAlphabet.length;
+            } else {
+              key = (index - topLetterId) % englishCapitalAlphabet.length;
+            }
+
+            if (key >= 1)
+              keysArray.push(key);
+          }
+
+          console.log(keysArray);
+
+          return keysArray;
+        }
+    </script>
+</body>
+</html>
